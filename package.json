@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/pbp66/Social-Network-API#readme",
   "dependencies": {
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "luxon": "^3.2.1",
+    "mongoose": "^6.9.0"
   }
 }
