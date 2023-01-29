@@ -1,6 +1,6 @@
 import { Schema, model } from "mongoose";
 import { DateTime } from "luxon";
-import reactionSchema from "reaction.js";
+import reactionSchema from "../schemas/reaction.js";
 import { getDate } from "../utils/getDate.js";
 
 const thoughtSchema = new Schema(
