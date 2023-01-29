@@ -47,6 +47,11 @@ userSchema.pre("findOneAndUpdate", (next) => {
 	this.update({}, { $inc: { __v: 1 } }, next);
 });
 
+userSchema.pre("updateOne", (next) => {
+	this.set({ updatedAt: DateTime.now().toISO() });
+	this.update({}, { $inc: { __v: 1 } }, next);
+});
+
 const user = model("user", userSchema);
 
 export default user;

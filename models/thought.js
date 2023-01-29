@@ -35,6 +35,16 @@ thoughtSchema.virtual("reactionCount").get(function () {
 	return this.reactions.length;
 });
 
+thoughtSchema.pre("findOneAndUpdate", (next) => {
+	this.set({ updatedAt: DateTime.now().toISO() });
+	this.update({}, { $inc: { __v: 1 } }, next);
+});
+
+thoughtSchema.pre("updateOne", (next) => {
+	this.set({ updatedAt: DateTime.now().toISO() });
+	this.update({}, { $inc: { __v: 1 } }, next);
+});
+
 // May not be needed if all associated reactions are deleted since no model exists for reactions...
 // thoughtSchema.pre("deleteMany", (next) => {
 

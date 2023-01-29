@@ -109,6 +109,6 @@ export function deleteThought(req, res) {
 		});
 }
 
-// * POST router.route("/:thoughtId/reactions").post(createReaction);
+// * PUT router.route("/:thoughtId/reactions").post(createReaction);
 
 // * DELETE router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
