@@ -1,18 +1,20 @@
 import { Schema, model } from "mongoose";
+import { DateTime } from "luxon";
 import reactionSchema from "reaction.js";
+import { getDate } from "../utils/getDate.js";
 
 const thoughtSchema = new Schema(
 	{
 		thoughtText: {
 			type: String,
 			required: true,
-			min: [1, "Cannot create an empty entry"],
-			max: [280, "Exceed character limit"],
+			minLength: [1, "Cannot create an empty thought"],
+			maxLength: [280, "Exceeded character limit"],
 		},
 		createdAt: {
-			type: Date,
-			default: () => {},
-			getter: true,
+			type: DateTime,
+			default: DateTime.now(),
+			get: getDate,
 		},
 		// username: {
 		// 	type: String,
@@ -28,6 +30,7 @@ const thoughtSchema = new Schema(
 	{
 		toJSON: {
 			virtuals: true,
+			getters: true,
 		},
 		id: false,
 	}
