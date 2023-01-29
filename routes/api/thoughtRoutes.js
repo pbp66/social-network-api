@@ -1,26 +1,18 @@
 import { Router } from "express";
 const router = new Router();
 
-// TODO: Import controllers. See commented example below:
-// const {
-// 	getStudents,
-// 	getSingleStudent,
-// 	createStudent,
-// 	deleteStudent,
-// 	addAssignment,
-// 	removeAssignment,
-// } = require("../../controllers/studentController");
+// TODO: Import controllers.
 
-// // /api/students
-// router.route("/").get(getStudents).post(createStudent);
+router.route("/").get(getAllThoughts).post(createThought);
 
-// // /api/students/:studentId
-// router.route("/:studentId").get(getSingleStudent).delete(deleteStudent);
+router
+	.route("/:thoughtId")
+	.get(getOneThought)
+	.put(updateThought)
+	.delete(deleteThought);
 
-// // /api/students/:studentId/assignments
-// router.route("/:studentId/assignments").post(addAssignment);
+router.route("/:thoughtId/reactions").post(createReaction);
 
-// // /api/students/:studentId/assignments/:assignmentId
-// router.route("/:studentId/assignments/:assignmentId").delete(removeAssignment);
+router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
 
 export default router;

@@ -15,8 +15,7 @@ const reactionSchema = new Schema(
 			maxLength: [280, "Exceeded character limit"],
 		},
 		username: {
-			type: Schema.type.ObjectId,
-			ref: "User",
+			type: String,
 			required: true,
 		},
 		createdAt: {

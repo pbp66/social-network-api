@@ -16,13 +16,8 @@ const thoughtSchema = new Schema(
 			default: DateTime.now(),
 			get: getDate,
 		},
-		// username: {
-		// 	type: String,
-		// 	required: true,
-		// },
 		username: {
-			type: Schema.Types.ObjectId,
-			ref: "User",
+			type: String,
 			required: true,
 		},
 		reactions: [reactionSchema],
@@ -39,6 +34,11 @@ const thoughtSchema = new Schema(
 thoughtSchema.virtual("reactionCount").get(function () {
 	return this.reactions.length;
 });
+
+// May not be needed if all associated reactions are deleted since no model exists for reactions...
+// thoughtSchema.pre("deleteMany", (next) => {
+
+// })
 
 const thought = model("thought", thoughtSchema);
 

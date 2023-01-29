@@ -1,5 +1,114 @@
-import { User, Reaction, Thought } from "../models/index.js";
+import { User, Thought } from "../models/index.js";
 
 // TODO: Implement controller methods
 
-export {};
+// * GET router.route("/").get(getAllThoughts);
+export function getAllThoughts(req, res) {
+	Thought.find()
+		.then((thoughts) => {
+			const newThoughts = thoughts.map((thought) => {
+				// ? Does a catch need to be implemented?
+				const user = User.findOne({ username: thought.username }).then(
+					(user) => res.json(user)
+				);
+				thought["userId"] = user.username;
+				return thought;
+			});
+			return res.json(newThoughts);
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
+
+// * GET router.route("/:thoughtId").get(getOneThought);
+export function getOneThought(req, res) {
+	Thought.findOne({ _id: req.params.thoughtId })
+		.then((thought) => {
+			// ? Does a catch need to be implemented?
+			const user = User.findOne({ username: thought.username }).then(
+				(user) => res.json(user)
+			);
+			thought["userId"] = user.username;
+			return res.json(thought);
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
+
+// * POST router.route("/").post(createThought);
+export function createThought(req, res) {
+	// ? Does a catch need to be implemented?
+	const user = User.findOne({ username: req.body.username }).then((user) =>
+		res.json(user)
+	);
+	req.body["userId"] = user.username;
+	Thought.create(req.body)
+		.then((thought) => res.json(thought))
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
+
+// * PUT router.route("/:thoughtId").put(updateThought);
+export function updateThought(req, res) {
+	Thought.findOneAndUpdate(
+		{ _id: req.params.thoughtId },
+		{ $set: req.body },
+		{ runValidators: true, new: true } // {returnDocument: after} ?
+	)
+		.then((thought) => {
+			if (!thought) {
+				return res
+					.status(404)
+					.json({ message: "No thought with this id!" });
+			} else {
+				// ? Does a catch need to be implemented?
+				const user = User.findOne({ username: thought.username }).then(
+					(user) => res.json(user)
+				);
+				thought["userId"] = user.username;
+				return res.json(thought);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
+
+// *  DELETE router.route("/:thoughtId").delete(deleteThought);
+export function deleteThought(req, res) {
+	Thought.findByIdAndDelete(req.params.thoughtId)
+		.then((thought) => {
+			if (!thought) {
+				return res
+					.status(404)
+					.json({ message: "No thought with this id!" });
+			} else {
+				User.findOneAndUpdate(
+					{ username: thought.username },
+					{ $pull: { thoughts: req.params.thoughtId } },
+					{ new: true }
+				).then((user) =>
+					!user
+						? res
+								.status(404)
+								.json({ message: "No user with this id!" })
+						: res.json(user)
+				);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
+
+// * POST router.route("/:thoughtId/reactions").post(createReaction);
+
+// * DELETE router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
