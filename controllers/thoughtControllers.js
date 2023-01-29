@@ -39,17 +39,15 @@ export function getOneThought(req, res) {
 
 // * POST router.route("/").post(createThought);
 export function createThought(req, res) {
-	// ? Does a catch need to be implemented?
-	const user = User.findOne({ username: req.body.username }).then((user) =>
-		res.json(user)
-	);
-	req.body["userId"] = user.username;
-	Thought.create(req.body)
-		.then((thought) => res.json(thought))
-		.catch((err) => {
-			console.error(err);
-			return res.status(500).json(err);
-		});
+	User.findOne({ username: req.body.username }).then((user) => {
+		req.body["userId"] = user.username;
+		Thought.create(req.body)
+			.then((thought) => res.json(thought))
+			.catch((err) => {
+				console.error(err);
+				return res.status(500).json(err);
+			});
+	});
 }
 
 // * PUT router.route("/:thoughtId").put(updateThought);

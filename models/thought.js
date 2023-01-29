@@ -49,11 +49,6 @@ thoughtSchema.pre("updateOne", function (next) {
 	next();
 });
 
-// May not be needed if all associated reactions are deleted since no model exists for reactions...
-// thoughtSchema.pre("deleteMany", (next) => {
-
-// })
-
 const thought = model("thought", thoughtSchema);
 
 export default thought;
