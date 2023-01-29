@@ -1,4 +1,4 @@
-import { connect, connection } from "mongoose";
+import mongoose, { connect } from "mongoose";
 
 const connectionString =
 	process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/socialnetworkDB";
@@ -8,4 +8,4 @@ connect(connectionString, {
 	useUnifiedTopology: true,
 });
 
-export default connection;
+export default mongoose.connection;

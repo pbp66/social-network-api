@@ -5,8 +5,8 @@ import { getDate } from "../utils/getDate.js";
 const reactionSchema = new Schema(
 	{
 		reactionId: {
-			type: Schema.type.ObjectId,
-			default: new mongoose.Types.ObjectId(),
+			type: Schema.Types.ObjectId,
+			default: new Schema.Types.ObjectId(),
 		},
 		reactionBody: {
 			type: String,
@@ -19,8 +19,10 @@ const reactionSchema = new Schema(
 			required: true,
 		},
 		createdAt: {
-			type: DateTime,
-			default: DateTime.now().toISO(),
+			type: Date,
+			default: () => {
+				return DateTime.now().toISO();
+			},
 			get: getDate,
 		},
 	},

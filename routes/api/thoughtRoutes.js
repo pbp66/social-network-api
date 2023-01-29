@@ -1,7 +1,14 @@
 import { Router } from "express";
 const router = new Router();
-
-// TODO: Import controllers.
+import {
+	getAllThoughts,
+	createThought,
+	getOneThought,
+	updateThought,
+	deleteThought,
+	createReaction,
+	deleteReaction,
+} from "../../controllers/thoughtControllers.js";
 
 router.route("/").get(getAllThoughts).post(createThought);
 

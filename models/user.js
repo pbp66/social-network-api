@@ -1,5 +1,4 @@
 import { Schema, model } from "mongoose";
-import thoughtSchema from "thought.js";
 import { DateTime } from "luxon";
 
 /*
@@ -25,8 +24,8 @@ const userSchema = new Schema(
 			unique: true,
 			match: [emailRegex, "Not a valid email address"],
 		},
-		thoughts: [thoughtSchema],
-		friends: [this],
+		thoughts: [{ type: Schema.Types.ObjectId, ref: "Thought" }],
+		friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
 	},
 	{
 		toJSON: {

@@ -1,7 +1,5 @@
 import { User, Thought } from "../models/index.js";
 
-// TODO: Implement controller methods
-
 // * GET router.route("/").get(getAllThoughts);
 export function getAllThoughts(req, res) {
 	Thought.find()

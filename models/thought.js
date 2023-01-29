@@ -12,8 +12,10 @@ const thoughtSchema = new Schema(
 			maxLength: [280, "Exceeded character limit"],
 		},
 		createdAt: {
-			type: DateTime,
-			default: DateTime.now(),
+			type: Date,
+			default: () => {
+				return DateTime.now().toISO();
+			},
 			get: getDate,
 		},
 		username: {
