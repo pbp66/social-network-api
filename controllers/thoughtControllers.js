@@ -4,16 +4,6 @@ import { User, Thought } from "../models/index.js";
 export function getAllThoughts(req, res) {
 	Thought.find()
 		.then((thoughts) => {
-			return thoughts.map(async (thought) => {
-				return User.findOne({ username: thought.username }).then(
-					(user) => {
-						thought["userId"] = user.username;
-						return thought;
-					}
-				);
-			});
-		})
-		.then((thoughts) => {
 			res.json(thoughts);
 		})
 		.catch((err) => {
@@ -25,12 +15,6 @@ export function getAllThoughts(req, res) {
 // * GET router.route("/:thoughtId").get(getOneThought);
 export function getOneThought(req, res) {
 	Thought.findOne({ _id: req.params.thoughtId })
-		.then(async (thought) => {
-			return User.findOne({ username: thought.username }).then((user) => {
-				thought["userId"] = user.username;
-				return thought;
-			});
-		})
 		.then((thought) => {
 			res.json(thought);
 		})
