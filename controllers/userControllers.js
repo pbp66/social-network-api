@@ -211,8 +211,10 @@ export function deleteFriend(req, res) {
 				}
 			});
 		})
+		.then(() => res.status(204).send())
 		.catch((err) => {
 			console.error(err);
-			return res.status(500).json(err);
+			res.status(500).json({ error: err });
+			return;
 		});
 }
