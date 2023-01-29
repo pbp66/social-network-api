@@ -4,15 +4,17 @@ import { User, Thought } from "../models/index.js";
 export function getAllThoughts(req, res) {
 	Thought.find()
 		.then((thoughts) => {
-			const newThoughts = thoughts.map((thought) => {
-				// ? Does a catch need to be implemented?
-				const user = User.findOne({ username: thought.username }).then(
-					(user) => res.json(user)
+			return thoughts.map(async (thought) => {
+				return User.findOne({ username: thought.username }).then(
+					(user) => {
+						thought["userId"] = user.username;
+						return thought;
+					}
 				);
-				thought["userId"] = user.username;
-				return thought;
 			});
-			return res.json(newThoughts);
+		})
+		.then((thoughts) => {
+			res.json(thoughts);
 		})
 		.catch((err) => {
 			console.error(err);
@@ -23,13 +25,14 @@ export function getAllThoughts(req, res) {
 // * GET router.route("/:thoughtId").get(getOneThought);
 export function getOneThought(req, res) {
 	Thought.findOne({ _id: req.params.thoughtId })
+		.then(async (thought) => {
+			return User.findOne({ username: thought.username }).then((user) => {
+				thought["userId"] = user.username;
+				return thought;
+			});
+		})
 		.then((thought) => {
-			// ? Does a catch need to be implemented?
-			const user = User.findOne({ username: thought.username }).then(
-				(user) => res.json(user)
-			);
-			thought["userId"] = user.username;
-			return res.json(thought);
+			res.json(thought);
 		})
 		.catch((err) => {
 			console.error(err);
