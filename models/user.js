@@ -41,14 +41,16 @@ userSchema.virtual("friendCount").get(function () {
 
 // Query middleware to increase version number and set updatedAt with findOneAndUpdate
 // https://stackoverflow.com/questions/35288488/easy-way-to-increment-mongoose-document-versions-for-any-update-queries
-userSchema.pre("findOneAndUpdate", (next) => {
+userSchema.pre("findOneAndUpdate", function (next) {
 	this.set({ updatedAt: DateTime.now().toISO() });
-	this.update({}, { $inc: { __v: 1 } }, next);
+	this.update({}, { $inc: { __v: 1 } });
+	next();
 });
 
-userSchema.pre("updateOne", (next) => {
+userSchema.pre("updateOne", function (next) {
 	this.set({ updatedAt: DateTime.now().toISO() });
-	this.update({}, { $inc: { __v: 1 } }, next);
+	this.update({}, { $inc: { __v: 1 } });
+	next();
 });
 
 const user = model("user", userSchema);
