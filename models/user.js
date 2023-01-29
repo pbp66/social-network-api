@@ -25,7 +25,12 @@ const userSchema = new Schema(
 			match: [emailRegex, "Not a valid email address"],
 		},
 		thoughts: [{ type: Schema.Types.ObjectId, ref: "Thought" }],
-		friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
+		friends: [
+			{
+				type: Schema.Types.ObjectId,
+				ref: "User",
+			},
+		],
 	},
 	{
 		toJSON: {
