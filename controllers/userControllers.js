@@ -57,14 +57,17 @@ export function updateUser(req, res) {
 export function deleteUser(req, res) {
 	User.findByIdAndDelete(req.params.userId).then((user) => {
 		if (!user) {
-			return res.status(404).json({ message: "No user with this id!" });
+			// * If no user exists, throw an error to prevent mongoose from trying to reference a non-existent user
+			throw new ReferenceError(
+				`No user with this id: ${req.params.userId}`
+			);
 		} else {
 			Thought.deleteMany({ username: user.username })
 				.then((thought) => {
 					if (!thought) {
-						return res.status(404).json({
-							message: "No thoughts belonged to this user!",
-						});
+						throw new ReferenceError(
+							`No thoughts belong to ${user.username}`
+						);
 					} else {
 						res.status(204).json({
 							message: `${thought} thoughts deleted!`,
