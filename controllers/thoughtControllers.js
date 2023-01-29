@@ -64,22 +64,26 @@ export function deleteThought(req, res) {
 	Thought.findByIdAndDelete(req.params.thoughtId)
 		.then((thought) => {
 			if (!thought) {
-				return res
-					.status(404)
-					.json({ message: "No thought with this id!" });
+				throw new ReferenceError(
+					`No thought with this id: ${req.params.thoughtId}`
+				);
 			} else {
 				User.findOneAndUpdate(
 					{ username: thought.username },
 					{ $pull: { thoughts: req.params.thoughtId } },
 					{ new: true }
-				).then((user) =>
-					!user
-						? res
-								.status(404)
-								.json({ message: "No user with this id!" })
-						: res.json(user)
-				);
+				).then((user) => {
+					if (!user) {
+						// * If no user exists, throw an error to prevent mongoose from trying to reference a non-existent user
+						throw new ReferenceError(
+							`No user with this id: ${req.params.userId}`
+						);
+					} else {
+						return user;
+					}
+				});
 			}
+			return res.json(thought);
 		})
 		.catch((err) => {
 			console.error(err);
