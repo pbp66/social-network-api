@@ -46,15 +46,10 @@ export function updateThought(req, res) {
 	)
 		.then((thought) => {
 			if (!thought) {
-				return res
-					.status(404)
-					.json({ message: "No thought with this id!" });
-			} else {
-				// ? Does a catch need to be implemented?
-				const user = User.findOne({ username: thought.username }).then(
-					(user) => res.json(user)
+				throw new ReferenceError(
+					`No thought with this id: ${req.params.thoughtId}`
 				);
-				thought["userId"] = user.username;
+			} else {
 				return res.json(thought);
 			}
 		})

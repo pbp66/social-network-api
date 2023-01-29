@@ -39,9 +39,10 @@ export function updateUser(req, res) {
 	)
 		.then((user) => {
 			if (!user) {
-				return res
-					.status(404)
-					.json({ message: "No user with this id!" });
+				// * If no user exists, throw an error to prevent mongoose from trying to reference a non-existent user
+				throw new ReferenceError(
+					`No user with this id: ${req.params.userId}`
+				);
 			} else {
 				return res.json(user);
 			}
