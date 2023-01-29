@@ -109,6 +109,58 @@ export function deleteThought(req, res) {
 		});
 }
 
-// * PUT router.route("/:thoughtId/reactions").post(createReaction);
+// * POST (PUT) router.route("/:thoughtId/reactions").post(createReaction);
+export function createReaction(req, res) {
+	Thought.findByIdAndUpdate(
+		req.params.thoughtId,
+		// ? Is req.body acceptable for the reactionSchema?
+		{ $push: { reactions: req.body } },
+		{ runValidators: true, new: true } // {returnDocument: after} ?
+	)
+		.then((thought) => {
+			if (!thought) {
+				return res
+					.status(404)
+					.json({ message: "No thought with this id!" });
+			} else {
+				// ? Does a catch need to be implemented?
+				const user = User.findOne({ username: thought.username }).then(
+					(user) => res.json(user)
+				);
+				thought["userId"] = user.username;
+				return res.json(thought);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}
 
-// * DELETE router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
+// * DELETE (PUT) router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
+export function deleteReaction(req, res) {
+	Thought.findByIdAndUpdate(
+		req.params.thoughtId,
+		// ? Is req.body acceptable for the reactionSchema?
+		{ $pull: { reactions: req.params.reactionId } },
+		{ new: true } // {returnDocument: after} ?)
+	)
+		.then((thought) => {
+			if (!thought) {
+				return res
+					.status(404)
+					.json({ message: "No thought with this id!" });
+			} else {
+				// ? Does a catch need to be implemented?
+				const user = User.findOne({ username: thought.username }).then(
+					(user) => res.json(user)
+				);
+				thought["userId"] = user.username;
+				return res.json(thought);
+			}
+		})
+		.catch((err) => {
+			console.error(err);
+			return res.status(500).json(err);
+		});
+}

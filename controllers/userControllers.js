@@ -76,7 +76,7 @@ export function deleteUser(req, res) {
 	});
 }
 
-// * PUT router.route("/:userId/friends/:friendId").post(addFriend);
+// * POST (PUT) router.route("/:userId/friends/:friendId").post(addFriend);
 export function addFriend(req, res) {
 	// * Friends field in user model is array of user schemas. A user object, not an ID, must be added to the array.
 
@@ -127,7 +127,7 @@ export function addFriend(req, res) {
 		});
 }
 
-// * DELETE router.route("/:userId/friends/:friendId").delete(deleteFriend);
+// * DELETE (PUT) router.route("/:userId/friends/:friendId").delete(deleteFriend);
 export function deleteFriend(req, res) {
 	// * Friends field in user model is array of user schemas. A user object, not an ID, must be removed from the array.
 
@@ -147,7 +147,11 @@ export function deleteFriend(req, res) {
 			return res.status(500).json(err);
 		});
 
-	User.findByIdAndDelete(req.params.userId, { $pull: { friends: friend } })
+	User.findByIdAndUpdate(
+		req.params.userId,
+		{ $pull: { friends: friend } },
+		{ new: true }
+	)
 		.then((user) =>
 			!user
 				? res.status(404).json({ message: "No user with this id!" })
@@ -158,7 +162,11 @@ export function deleteFriend(req, res) {
 			return res.status(500).json(err);
 		});
 
-	User.findByIdAndDelete(req.params.friendId, { $pull: { friends: user } })
+	User.findByIdAndUpdate(
+		req.params.friendId,
+		{ $pull: { friends: user } },
+		{ new: true }
+	)
 		.then((user) =>
 			!user
 				? res.status(404).json({ message: "No user with this id!" })
