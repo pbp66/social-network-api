@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import thoughtSchema from "thought.js";
+import { DateTime } from "luxon";
 
 /*
  * Handles 99 % of emails
@@ -24,8 +24,8 @@ const userSchema = new Schema(
 			unique: true,
 			match: [emailRegex, "Not a valid email address"],
 		},
-		thoughts: [thoughtSchema],
-		friends: [this],
+		thoughts: [{ type: Schema.Types.ObjectId, ref: "Thought" }],
+		friends: [{ type: Schema.Types.ObjectId, ref: "User" }],
 	},
 	{
 		toJSON: {
@@ -37,6 +37,18 @@ const userSchema = new Schema(
 
 userSchema.virtual("friendCount").get(function () {
 	return this.friends.length;
+});
+
+// Query middleware to increase version number and set updatedAt with findOneAndUpdate
+// https://stackoverflow.com/questions/35288488/easy-way-to-increment-mongoose-document-versions-for-any-update-queries
+userSchema.pre("findOneAndUpdate", (next) => {
+	this.set({ updatedAt: DateTime.now().toISO() });
+	this.update({}, { $inc: { __v: 1 } }, next);
+});
+
+userSchema.pre("updateOne", (next) => {
+	this.set({ updatedAt: DateTime.now().toISO() });
+	this.update({}, { $inc: { __v: 1 } }, next);
 });
 
 const user = model("user", userSchema);

@@ -1,26 +1,19 @@
 import { Router } from "express";
 const router = new Router();
+import {
+	getAllUsers,
+	createUser,
+	getOneUser,
+	updateUser,
+	deleteUser,
+	addFriend,
+	deleteFriend,
+} from "../../controllers/userControllers.js";
 
-// TODO: Import controllers. See commented example below:
-// const {
-// 	getStudents,
-// 	getSingleStudent,
-// 	createStudent,
-// 	deleteStudent,
-// 	addAssignment,
-// 	removeAssignment,
-// } = require("../../controllers/studentController");
+router.route("/").get(getAllUsers).post(createUser);
 
-// // /api/students
-// router.route("/").get(getStudents).post(createStudent);
+router.route("/:userId").get(getOneUser).put(updateUser).delete(deleteUser);
 
-// // /api/students/:studentId
-// router.route("/:studentId").get(getSingleStudent).delete(deleteStudent);
-
-// // /api/students/:studentId/assignments
-// router.route("/:studentId/assignments").post(addAssignment);
-
-// // /api/students/:studentId/assignments/:assignmentId
-// router.route("/:studentId/assignments/:assignmentId").delete(removeAssignment);
+router.route("/:userId/friends/:friendId").post(addFriend).delete(deleteFriend);
 
 export default router;
