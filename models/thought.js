@@ -14,7 +14,7 @@ const thoughtSchema = new Schema(
 		createdAt: {
 			type: Date,
 			default: () => {
-				return DateTime.now().toISO();
+				return DateTime.now();
 			},
 			get: getDate,
 		},

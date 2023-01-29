@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import { DateTime } from "luxon";
 import { getDate } from "../utils/getDate.js";
 
@@ -6,7 +6,7 @@ const reactionSchema = new Schema(
 	{
 		reactionId: {
 			type: Schema.Types.ObjectId,
-			default: new Schema.Types.ObjectId(),
+			default: () => new Types.ObjectId(),
 		},
 		reactionBody: {
 			type: String,
@@ -21,15 +21,17 @@ const reactionSchema = new Schema(
 		createdAt: {
 			type: Date,
 			default: () => {
-				return DateTime.now().toISO();
+				return DateTime.now();
 			},
 			get: getDate,
 		},
 	},
 	{
 		toJSON: {
+			virtuals: true,
 			getters: true,
 		},
+		id: false,
 	}
 );
 

@@ -42,7 +42,7 @@ export function updateThought(req, res) {
 	Thought.findOneAndUpdate(
 		{ _id: req.params.thoughtId },
 		{ $set: req.body },
-		{ runValidators: true, new: true } // {returnDocument: after} ?
+		{ runValidators: true, new: true }
 	)
 		.then((thought) => {
 			if (!thought) {
@@ -97,19 +97,14 @@ export function createReaction(req, res) {
 		req.params.thoughtId,
 		// ? Is req.body acceptable for the reactionSchema?
 		{ $push: { reactions: req.body } },
-		{ runValidators: true, new: true } // {returnDocument: after} ?
+		{ runValidators: true, new: true }
 	)
 		.then((thought) => {
 			if (!thought) {
-				return res
-					.status(404)
-					.json({ message: "No thought with this id!" });
-			} else {
-				// ? Does a catch need to be implemented?
-				const user = User.findOne({ username: thought.username }).then(
-					(user) => res.json(user)
+				throw new ReferenceError(
+					`No thought with this id: ${req.params.thoughtId}`
 				);
-				thought["userId"] = user.username;
+			} else {
 				return res.json(thought);
 			}
 		})
@@ -121,23 +116,39 @@ export function createReaction(req, res) {
 
 // * DELETE (PUT) router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
 export function deleteReaction(req, res) {
+	// Thought.findById(req.params.thoughtId)
+	// 	.then((thought) => {
+	// 		if (!thought) {
+	// 			throw new ReferenceError(
+	// 				`No thought with this id: ${req.params.thoughtId}`
+	// 			);
+	// 		}
+
+	// 		const reactionIds = thought.reactions.map(
+	// 			(reaction) => reaction.reactionId
+	// 		);
+
+	// 		if (!reactionIds.includes(req.params.reactionId)) {
+	// 			throw new ReferenceError(
+	// 				`Thought does not contain a reaction with this id: ${req.params.reactionId}`
+	// 			);
+	// 		} else {
+	// 			return thought;
+	// 		}
+	// 	})
+	// 	.then(() => {});
+
 	Thought.findByIdAndUpdate(
 		req.params.thoughtId,
-		// ? Is req.body acceptable for the reactionSchema?
-		{ $pull: { reactions: req.params.reactionId } },
-		{ new: true } // {returnDocument: after} ?)
+		{ $pull: { reactions: { reactionId: req.params.reactionId } } },
+		{ new: true }
 	)
 		.then((thought) => {
 			if (!thought) {
-				return res
-					.status(404)
-					.json({ message: "No thought with this id!" });
-			} else {
-				// ? Does a catch need to be implemented?
-				const user = User.findOne({ username: thought.username }).then(
-					(user) => res.json(user)
+				throw new ReferenceError(
+					`No reaction with this id: ${req.params.reactionId}`
 				);
-				thought["userId"] = user.username;
+			} else {
 				return res.json(thought);
 			}
 		})

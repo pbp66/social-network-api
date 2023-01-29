@@ -164,8 +164,8 @@ export function deleteFriend(req, res) {
 					`No user with this id: ${req.params.userId}`
 				);
 			} else if (!user.friends.includes(req.params.friendId)) {
-				throw new Error(
-					`User does not have a friend with ${req.params.friendId}`
+				throw new ReferenceError(
+					`User does not have a friend with this userId: ${req.params.friendId}`
 				);
 			} else {
 				return user;
@@ -179,8 +179,8 @@ export function deleteFriend(req, res) {
 						`No friend with this id: ${req.req.params.friendId}`
 					);
 				} else if (!friend.friends.includes(req.params.userId)) {
-					throw new Error(
-						`Friend is not friends with ${req.params.userId}`
+					throw new ReferenceError(
+						`Friend is not friends with this userId: ${req.params.userId}`
 					);
 				} else {
 					return friend;
