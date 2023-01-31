@@ -14,7 +14,7 @@ const thoughtSchema = new Schema(
 		createdAt: {
 			type: Date,
 			default: () => {
-				return DateTime.now().toISO();
+				return Date.now();
 			},
 			get: getDate,
 		},
@@ -37,20 +37,17 @@ thoughtSchema.virtual("reactionCount").get(function () {
 	return this.reactions.length;
 });
 
-thoughtSchema.pre("findOneAndUpdate", (next) => {
+thoughtSchema.pre("findOneAndUpdate", function (next) {
 	this.set({ updatedAt: DateTime.now().toISO() });
-	this.update({}, { $inc: { __v: 1 } }, next);
+	this.update({}, { $inc: { __v: 1 } });
+	next();
 });
 
-thoughtSchema.pre("updateOne", (next) => {
+thoughtSchema.pre("updateOne", function (next) {
 	this.set({ updatedAt: DateTime.now().toISO() });
-	this.update({}, { $inc: { __v: 1 } }, next);
+	this.update({}, { $inc: { __v: 1 } });
+	next();
 });
-
-// May not be needed if all associated reactions are deleted since no model exists for reactions...
-// thoughtSchema.pre("deleteMany", (next) => {
-
-// })
 
 const thought = model("thought", thoughtSchema);
 
