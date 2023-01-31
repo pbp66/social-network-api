@@ -40,7 +40,7 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 
 ## Installation
 
-No installation is required by the user. Please visit the deployed website to interact with the tech blog! [My Simple Tech Blog](https://vast-reef-41345.herokuapp.com/)
+TODO
 
 ## Usage
 
