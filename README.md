@@ -2,7 +2,9 @@
 
 ## Description
 
-TODO
+Simple social network api with the capability to create short thoughts and reactions to the thoughts. Thoughts can be created, updated, deleted, and retrieved for viewing purposes. Users can be created, updated, and deleted as well. Functionality is provided to add and delete friends.
+
+API Server is built using [express.js](https://expressjs.com/) with [Mongo DB](https://www.mongodb.com/) as the backend. [Mongoose](https://mongoosejs.com/docs/) is used as the ORM to interface with MongoDB. [Luxon](https://moment.github.io/luxon/#/?id=luxon) is used for formatting date and time stamps in the JSON response.
 
 User Story
 
