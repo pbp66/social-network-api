@@ -40,7 +40,7 @@ THEN I am able to successfully create and delete reactions to thoughts and add a
 
 ## Installation
 
-TODO
+Git Clone this repository onto your local machine. Navigate to the downloaded project location. Open a command-line terminal in the same directory and run `npm install`. If you do not have nodejs and npm installed, you must install those first before running `npm install`. After npm install completes, you are ready to run the program.
 
 ## Usage
 
