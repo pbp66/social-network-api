@@ -29,11 +29,7 @@ export function createThought(req, res) {
 	User.findOne({ username: req.body.username }).then((user) => {
 		req.body["userId"] = user.username;
 		Thought.create(req.body)
-			.then((thought) => {
-				user.thoughts.push(thought._id);
-				user.save();
-				res.json(thought);
-			})
+			.then((thought) => res.json(thought))
 			.catch((err) => {
 				console.error(err);
 				return res.status(500).json(err);
@@ -120,6 +116,28 @@ export function createReaction(req, res) {
 
 // * DELETE (PUT) router.route("/:thoughtId/reactions/:reactionId").delete(deleteReaction);
 export function deleteReaction(req, res) {
+	// Thought.findById(req.params.thoughtId)
+	// 	.then((thought) => {
+	// 		if (!thought) {
+	// 			throw new ReferenceError(
+	// 				`No thought with this id: ${req.params.thoughtId}`
+	// 			);
+	// 		}
+
+	// 		const reactionIds = thought.reactions.map(
+	// 			(reaction) => reaction.reactionId
+	// 		);
+
+	// 		if (!reactionIds.includes(req.params.reactionId)) {
+	// 			throw new ReferenceError(
+	// 				`Thought does not contain a reaction with this id: ${req.params.reactionId}`
+	// 			);
+	// 		} else {
+	// 			return thought;
+	// 		}
+	// 	})
+	// 	.then(() => {});
+
 	Thought.findByIdAndUpdate(
 		req.params.thoughtId,
 		{ $pull: { reactions: { reactionId: req.params.reactionId } } },
